@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Next Word Predictor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      color: #fff;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #ff7a18;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ff4e00;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    .highlight {
+      color: #00ffcc;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Next Word Predictor 🤖</h1>
+
+  <input type="text" id="inputText" placeholder="Type a sentence..." />
+
+  <br>
+  <button onclick="predict()">Predict</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+async function predict() {
+  const text = document.getElementById("inputText").value;
+
+  if (!text) {
+    alert("Please enter some text");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://127.0.0.1:5000/predict", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ text: text })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("result").innerHTML =
+      `Prediction: <span class="highlight">${data.next_word}</span>`;
+  } catch (error) {
+    document.getElementById("result").innerText = "Error connecting to API";
+  }
+}
+</script>
+
+</body>
+</html>
